@@ -11,7 +11,7 @@ a standard tic tac toe game is just two things:
 
 **Size of the board**
 - default to 3 (means a 3 x 3 grid, and 3 in a row to win)
-- same algorithms will work for any finite board size, as long as the win condition is still a full row (3 in a row on a 3x3 board, or 4 in a row on a 4x4 board), not a partial row (3 in a row on a 4x4 board)
+- the same algorithms will work for any finite board size, as long as the win condition is still a full row (3 in a row on a 3x3 board, or 4 in a row on a 4x4 board), not a partial row (3 in a row on a 4x4 board)
 
 **List of completed moves**
 - a list of squares chosen in each turn, with the squares numbered from top left, 1 through (size^2)
