@@ -13,23 +13,10 @@ export function isValidMove(move, boardSize, moves) {
 }
 
 export function setsAreEquivalent(a, b) {
-  if (a.size !== b.size) {
-    return false
-  }
-
-  for(const item of a) {
-    if (!b.has(item)) {
-      return false
-    }
-  }
-
-  return true
+  return a.size === b.size && setContainsAll(a,b)
 }
 
 export function setContainsAll(a, b) {
-  if (a.size < b.size) {
-    return false
-  }
 
   for(const item of b) {
     if (!a.has(item)) {
@@ -41,7 +28,7 @@ export function setContainsAll(a, b) {
 }
 
 export function getPlayerMoves(moves, player) {
-  const filter = (value, index) => index % 2 == (player == X ? 0 : 1);
+  const filter = (_, index) => index % 2 == (player == X ? 0 : 1);
   const playerMoves = Array.from(moves).filter(filter)
   return new Set(playerMoves)
 }
@@ -53,7 +40,6 @@ export function playerWins(moves, player, winningSets) {
 }
 
 export function generateWinningSets(boardSize) {
-
   return [
     ...generateRows(boardSize),
     ...generateColumns(boardSize),
@@ -64,7 +50,6 @@ export function generateWinningSets(boardSize) {
 function generateRows(boardSize) {
   const rows = []
   const max = boardSize * boardSize;
-
   for(let rowStart = 1; rowStart < max; rowStart += boardSize) {
     const row = new Set()
     for(let square = rowStart; square < rowStart + boardSize; square++) {
@@ -72,7 +57,6 @@ function generateRows(boardSize) {
     }
     rows.push(row)
   }
-
   return rows
 }
 
