@@ -12,6 +12,46 @@ export function isValidMove(move, boardSize, moves) {
     && !moves.has(move)
 }
 
+export function setsAreEquivalent(a, b) {
+  if (a.size !== b.size) {
+    return false
+  }
+
+  for(const item of a) {
+    if (!b.has(item)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export function setContainsAll(a, b) {
+  if (a.size < b.size) {
+    return false
+  }
+
+  for(const item of b) {
+    if (!a.has(item)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export function getPlayerMoves(moves, player) {
+  const filter = (value, index) => index % 2 == (player == X ? 0 : 1);
+  const playerMoves = Array.from(moves).filter(filter)
+  return new Set(playerMoves)
+}
+
+export function playerWins(moves, player, winningSets) {
+  const playerMoves = getPlayerMoves(moves, player)
+  const winningSet = winningSets.find(set => setContainsAll(playerMoves, set))
+  return winningSet || false
+}
+
 export function generateWinningSets(boardSize) {
 
   return [
@@ -67,18 +107,4 @@ function generateDiagonals(boardSize) {
   }
 
   return [diagonal, antidiagonal]
-}
-
-export function setsAreEquivalent(a, b) {
-  if (a.size !== b.size) {
-    return false
-  }
-
-  for(const item of a) {
-    if (!b.has(item)) {
-      return false
-    }
-  }
-
-  return true
 }

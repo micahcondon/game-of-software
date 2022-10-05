@@ -4,8 +4,11 @@ import {
   X, O,
   whoseTurnIsIt,
   isValidMove,
+  setsAreEquivalent,
+  setContainsAll,
+  getPlayerMoves,
   generateWinningSets,
-  setsAreEquivalent
+  playerWins
 } from './algorithms.js'
 
 describe('whoseTurnIsIt', () => {
@@ -81,6 +84,38 @@ describe('setsAreEquivalent', () => {
   })
 })
 
+describe('setContainsAll', () => {
+
+  it('returns true if every value in set b is included in set a', () => {
+    assert.ok(setContainsAll(new Set([1,2,3,4]), new Set([1,2,3,4])))
+    assert.ok(setContainsAll(new Set([1,2,3,4]), new Set([1,2,3])))
+    assert.ok(setContainsAll(new Set([1,2,3,4]), new Set()))
+  })
+
+  it('returns false if any value in b is not included in set a', () => {
+    assert.equal(setContainsAll(new Set([1,2,3,4]), new Set([1,2,3,4,5])), false)
+    assert.equal(setContainsAll(new Set([1,2,3,4]), new Set([1,2,3,5])), false)
+    assert.equal(setContainsAll(new Set([1,2,3,4]), new Set([5])), false)
+  })
+})
+
+describe('getPlayerMoves', () => {
+
+  it('returns the correct moves for player X', () => {
+    const moves = new Set([1,5,3,2,8])
+    const expectedMoves = new Set([1,3,8])
+    const playerXMoves = getPlayerMoves(moves, X)
+    assert.deepEqual(playerXMoves, expectedMoves)
+  })
+
+  it('returns the correct moves for player O', () => {
+    const moves = new Set([1,5,3,2,8])
+    const expectedMoves = new Set([5,2])
+    const playerOMoves = getPlayerMoves(moves, O)
+    assert.deepEqual(playerOMoves, expectedMoves)
+  })
+})
+
 describe('generateWinningSets', () => {
 
   it('generates the correct number of sets', () => {
@@ -133,4 +168,43 @@ describe('generateWinningSets', () => {
     })
   })
 
+  it('generates valid sets for larger boards', () => {
+    const expectedSets = [
+      new Set([1,2,3,4,5]),
+      new Set([1,6,11,16,21]),
+      new Set([1,7,13,19,25])
+    ]
+    const winningSets = generateWinningSets(5)
+    expectedSets.forEach((expectedSet) => {
+      assert.ok(
+        winningSets.find(set => setsAreEquivalent(set, expectedSet)),
+        `Expected to find set ${Array.from(expectedSet)}`
+      )
+    })
+  })
+
+})
+
+describe('playerWins', () => {
+
+  const winningSets = generateWinningSets(3)
+  const game1 = new Set([3,4,2,5,1])
+  const game2 = new Set([5,2,9,1,4,3])
+
+  it('Returns truthy if the players moves match a winning set', () => {
+    assert.ok(playerWins(game1, X, winningSets))
+    assert.ok(playerWins(game2, O, winningSets))
+  })
+
+  it('Returns the winning set if the players moves match a winning set', () => {
+    assert.deepEqual(
+      playerWins(game1, X, winningSets),
+      new Set([1,2,3]))
+    assert.ok(playerWins(game2, O, winningSets))
+  })
+
+  it('Returns false if the players moves do not match a winning set', () => {
+    assert.equal(playerWins(game1, O, winningSets), false)
+    assert.equal(playerWins(game2, X, winningSets), false)
+  })
 })
