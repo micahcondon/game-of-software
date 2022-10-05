@@ -39,6 +39,15 @@ export function playerWins(moves, player, winningSets) {
   return winningSet || false
 }
 
+export function renderBoard(moves, boardSize) {
+  const playerXMoves = getPlayerMoves(moves, X)
+  const playerOMoves = getPlayerMoves(moves, O)
+  const board = new Array(boardSize * boardSize).fill(null)
+  for(const x of playerXMoves) { board[x - 1] = X }
+  for(const o of playerOMoves) { board[o - 1] = O }
+  return board
+}
+
 export function generateWinningSets(boardSize) {
   return [
     ...generateRows(boardSize),

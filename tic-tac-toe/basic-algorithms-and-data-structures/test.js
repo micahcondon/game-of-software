@@ -8,7 +8,8 @@ import {
   setContainsAll,
   getPlayerMoves,
   generateWinningSets,
-  playerWins
+  playerWins,
+  renderBoard
 } from './algorithms.js'
 
 describe('whoseTurnIsIt', () => {
@@ -206,5 +207,30 @@ describe('playerWins', () => {
   it('Returns false if the players moves do not match a winning set', () => {
     assert.equal(playerWins(game1, O, winningSets), false)
     assert.equal(playerWins(game2, X, winningSets), false)
+  })
+})
+
+describe('renderBoard', () => {
+
+  it('renders correct board values', () => {
+
+    assert.deepEqual(
+      renderBoard(new Set(), 3),
+      [
+        null, null, null,
+        null, null, null,
+        null, null, null
+      ]
+    )
+
+    assert.deepEqual(
+      renderBoard(new Set([1,5,3,2,8]), 3),
+      [
+        X, O, X,
+        null, O, null,
+        null, X, null
+      ]
+    )
+
   })
 })
