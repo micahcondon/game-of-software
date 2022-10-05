@@ -1,6 +1,12 @@
 import assert from 'assert'
 import { describe, it } from 'node:test'
-import { X, O, whoseTurnIsIt, isValidMove } from './algorithms.js'
+import {
+  X, O,
+  whoseTurnIsIt,
+  isValidMove,
+  generateWinningSets,
+  setsAreEquivalent
+} from './algorithms.js'
 
 describe('whoseTurnIsIt', () => {
 
@@ -46,5 +52,52 @@ describe('isValidMove', () => {
   it('Returns true if move is within board boundaries and not already taken', () => {
     const valid = isValidMove(5, 3, new Set([1,7,3,9]))
     assert.equal(valid, true)
+  })
+
+})
+
+describe('setsAreEquivalent', () => {
+
+  it('returns false if sets are different', () => {
+    assert.equal(
+      setsAreEquivalent(new Set([1,2,3]), new Set([])),
+      false
+    )
+    assert.equal(
+      setsAreEquivalent(new Set([1,2,3]), new Set([1,2,4])),
+      false
+    )
+  })
+
+  it('returns true if sets are equivalent', () => {
+    assert.equal(
+      setsAreEquivalent(new Set([1,2,3]), new Set([1,2,3])),
+      true
+    )
+    assert.equal(
+      setsAreEquivalent(new Set([1,2,3]), new Set([3,1,2])),
+      true
+    )
+  })
+})
+
+describe('generateWinningSets', () => {
+
+  it('generates the correct number of sets', () => {
+    assert.equal(generateWinningSets(3).length, 8)
+    assert.equal(generateWinningSets(4).length, 10)
+    assert.equal(generateWinningSets(7).length, 16)
+  })
+
+  it('generates a set for each row', () => {
+    const expectedRows = [
+      new Set([1,2,3]),
+      new Set([4,5,6]),
+      new Set([7,8,9])
+    ]
+    const winningSets = generateWinningSets(3)
+    expectedRows.forEach((row) => {
+      assert.ok(winningSets.find(set => setsAreEquivalent(set, row)))
+    })
   })
 })

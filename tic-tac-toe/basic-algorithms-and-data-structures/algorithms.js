@@ -11,3 +11,21 @@ export function isValidMove(move, boardSize, moves) {
     && move <= boardSize * boardSize
     && !moves.has(move)
 }
+
+export function generateWinningSets(boardSize) {
+  return new Array(boardSize * 2 + 2)
+}
+
+export function setsAreEquivalent(a, b) {
+  if (a.size !== b.size) {
+    return false
+  }
+
+  for(const item of a) {
+    if (!b.has(item)) {
+      return false
+    }
+  }
+
+  return true
+}
