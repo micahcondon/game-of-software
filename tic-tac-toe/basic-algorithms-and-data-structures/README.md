@@ -24,4 +24,4 @@ Every other bit of state, such as 'whose turn is it', 'is the game over', 'who h
 
 ## Coding the algorithm
 
-After thinking about the algorithm off and on for a couple days in my spare time, and doing a bit of reading, the actual coding was simple. It took me just about two hours to write the ten functions, and twenty ten cases that cover all of the algorithm details that I think I will need to build this game.
+After thinking about the algorithm off and on for a couple days in my spare time, including a bit of reading and note taking, the actual coding was simple. It took me just about two hours to write the ten functions, and twenty ten cases that cover all of the algorithm details that I think I will need to build this game.
