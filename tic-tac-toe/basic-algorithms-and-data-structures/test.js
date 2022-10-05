@@ -97,7 +97,40 @@ describe('generateWinningSets', () => {
     ]
     const winningSets = generateWinningSets(3)
     expectedRows.forEach((row) => {
-      assert.ok(winningSets.find(set => setsAreEquivalent(set, row)))
+      assert.ok(
+        winningSets.find(set => setsAreEquivalent(set, row)),
+        `Expected to find row ${Array.from(row)}`
+      )
     })
   })
+
+  it('generates a set for each column', () => {
+    const expectedColumns = [
+      new Set([1,4,7]),
+      new Set([2,5,8]),
+      new Set([3,6,9])
+    ]
+    const winningSets = generateWinningSets(3)
+    expectedColumns.forEach((column) => {
+      assert.ok(
+        winningSets.find(set => setsAreEquivalent(set, column)),
+        `Expected to find column ${Array.from(column)}`
+      )
+    })
+  })
+
+  it('generates a set for each diagonal', () => {
+    const expectedDiagonals = [
+      new Set([1,5,9]),
+      new Set([3,5,7])
+    ]
+    const winningSets = generateWinningSets(3)
+    expectedDiagonals.forEach((diagonal) => {
+      assert.ok(
+        winningSets.find(set => setsAreEquivalent(set, diagonal)),
+        `Expected to find diagonal ${Array.from(diagonal)}`
+      )
+    })
+  })
+
 })
