@@ -101,3 +101,51 @@ function generateDiagonals(boardSize) {
 
   return [diagonal, antidiagonal]
 }
+
+export function calculateGameState(previousMoves = undefined, move = undefined, boardSize = 3) {
+
+  const moves = new Set(Array.from(previousMoves || []));
+  const winningSets = generateWinningSets(boardSize)
+
+  let gameOverCondition = calculateGameOver(moves, winningSets, boardSize)
+
+  if (!gameOverCondition.gameOver) {
+
+    if (isValidMove(move, boardSize, moves)) {
+      moves.add(move)
+    }
+
+    gameOverCondition = calculateGameOver(moves, winningSets, boardSize)
+
+  }
+
+  const board = renderBoard(moves, boardSize)
+
+  const { gameOver, winner, winningSet } = gameOverCondition
+
+  const turn = gameOver ? undefined : whoseTurnIsIt(moves)
+
+  return { moves, board, turn, winner, winningSet, gameOver }
+}
+
+function calculateGameOver(moves, winningSets, boardSize) {
+
+  const xWins = playerWins(moves, X, winningSets)
+  const oWins = !xWins && playerWins(moves, O, winningSets)
+  let winner = undefined
+  let winningSet = undefined 
+
+  if (xWins) {
+    winner = X
+    winningSet = xWins
+  }
+
+  if (oWins) {
+    winner = O
+    winningSet = oWins
+  }
+
+  const gameOver = !!winner || moves.size >= boardSize * boardSize
+
+  return { gameOver, winner, winningSet }
+}

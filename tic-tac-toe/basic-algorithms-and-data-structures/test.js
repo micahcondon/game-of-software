@@ -9,7 +9,8 @@ import {
   getPlayerMoves,
   generateWinningSets,
   playerWins,
-  renderBoard
+  renderBoard,
+  calculateGameState
 } from './algorithms.js'
 
 describe('whoseTurnIsIt', () => {
@@ -231,6 +232,94 @@ describe('renderBoard', () => {
         null, X, null
       ]
     )
+
+  })
+})
+
+describe('calculateGameState', () => {
+
+  it('returns correct state for an empty game', () => {
+    const expectedState = {
+      moves: new Set(),
+      board: [
+        null, null, null,
+        null, null, null,
+        null, null, null],
+      turn: X,
+      winner: null,
+      winningSet: undefined,
+      gameOver: false
+    }
+
+    const actualState = calculateGameState()
+
+    assert.deepEqual(actualState, expectedState)
+  })
+
+  it('returns correct state for an in progress game', () => {
+
+    const previousMoves = new Set([1,5,2,4])
+    const move = 7
+
+    const expectedState = {
+      moves: new Set([1,5,2,4,7]),
+      board: [
+        X, X, null,
+        O, O, null,
+        X, null, null],
+      turn: O,
+      winner: null,
+      winningSet: undefined,
+      gameOver: false
+    }
+
+    const actualState = calculateGameState(previousMoves, move, 3)
+
+    assert.deepEqual(actualState, expectedState)
+
+  })
+
+  it('returns correct state for a winning game', () => {
+    const previousMoves = new Set([1,5,2,4])
+    const move = 3
+
+    const expectedState = {
+      moves: new Set([1,5,2,4,3]),
+      board: [
+        X, X, X,
+        O, O, null,
+        null, null, null],
+      turn: undefined,
+      winner: X,
+      winningSet: new Set([1,2,3]),
+      gameOver: true
+    }
+
+    const actualState = calculateGameState(previousMoves, move, 3)
+
+    assert.deepEqual(actualState, expectedState)
+
+  })
+
+  it('returns correct state if game is already over', () => {
+    const previousMoves = new Set([1,5,2,4,3])
+    const move = 6
+
+    const expectedState = {
+      moves: new Set([1,5,2,4,3]),
+      board: [
+        X, X, X,
+        O, O, null,
+        null, null, null],
+      turn: undefined,
+      winner: X,
+      winningSet: new Set([1,2,3]),
+      gameOver: true
+    }
+
+    const actualState = calculateGameState(previousMoves, move, 3)
+
+    assert.deepEqual(actualState, expectedState)
 
   })
 })
